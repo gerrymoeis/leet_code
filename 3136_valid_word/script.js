@@ -3,32 +3,22 @@
  * @return {boolean}
  */
 var isValid = function(word) {
-    let vowels = new Set(['a', 'e', 'i', 'o', 'u'])
-    if (word.length >= 3) {
-      if (/^[a-zA-Z0-9]+$/.test(word)) {
-        let hasVowel = false
-        let hasConsonant = false
+    if (word.length < 3) return false
+    if (!/^[a-zA-Z0-9]+$/.test(word)) return false
+
+    let hasVowel = false, hasConsonant = false
+    
+    for (let char of word) {
+        if (hasVowel && hasConsonant) return true
         
-        for (let i in word) {
-          if (hasVowel && hasConsonant) return true
-          
-          if (vowels.has(word[i])) {
+        if ('aiueo'.includes(char.toLowerCase())) {
             hasVowel = true
-          }
-          else {
+        } else if (/[a-zA-Z]/.test(char)) {
             hasConsonant = true
-          }
         }
-        
-        if (!hasVowel || !hasConsonant) return false
-      }
-      else {
-        return false
-      }
     }
-    else {
-      return false
-    }
+    
+    return hasVowel && hasConsonant
 };
 
 let word = "234Adas"
@@ -52,6 +42,37 @@ console.log(isValid(word))
 //       // for (let i=1; i < word.length; i++) {
 //       //   w
 //       // }
+//     }
+//     else {
+//       return false
+//     }
+// };
+
+// First Attempt
+// var isValid = function(word) {
+//     let vowels = new Set(['a', 'e', 'i', 'o', 'u'])
+//     if (word.length >= 3) {
+//       if (/^[a-zA-Z0-9]+$/.test(word)) {
+//         let hasVowel = false
+//         let hasConsonant = false
+        
+//         for (let i in word) {
+//           if (hasVowel && hasConsonant) return true
+          
+//           if (vowels.has(word[i].toLowerCase())) {
+//             hasVowel = true
+//           }
+//           else if (isNaN(word[i])) {
+//             hasConsonant = true
+//           }
+//         }
+        
+//         if (hasVowel && hasConsonant) return true
+//         else return false
+//       }
+//       else {
+//         return false
+//       }
 //     }
 //     else {
 //       return false
