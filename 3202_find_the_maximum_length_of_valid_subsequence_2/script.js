@@ -3,6 +3,26 @@
  * @param {number} k
  * @return {number}
  */
+
+// First Place LeetCode Solution
+// var maximumLength = function(nums, k) {
+//     let res = 2
+
+//     for (let r = 0; r < k; r++) {
+//         const dp = Array(k).fill(0)
+
+//         for (let num of nums) {
+//             const mod = num % k
+//             const prevMod = (r - mod + k) % k
+//             dp[mod] = dp[prevMod] + 1
+//         }
+
+//         res = Math.max(res, ...dp)
+//     }
+
+//     return res
+// };
+
 // My Code
 var maximumLength = function(nums, k) {
     if (nums.length <= 2 || k <= 1) return nums.length
