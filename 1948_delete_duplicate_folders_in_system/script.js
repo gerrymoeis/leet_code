@@ -75,7 +75,6 @@ function markDuplicates(trie, nodeIndex, seenHashes) {
       }
     }
     
-    // const fullKey = currentNode.char + '(' + structureKey + ')'
     return toHash(structureKey)
 }
 
