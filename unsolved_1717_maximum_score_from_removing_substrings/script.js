@@ -4,6 +4,7 @@
  * @param {number} y
  * @return {number}
  */
+// AI - Claude
 var maximumGain = function(s, x, y) {
     function removeAndCount(str, first, second, points) {
         const stack = []
