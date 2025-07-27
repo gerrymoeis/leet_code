@@ -4,21 +4,13 @@
  */
 var countHillValley = function(nums) {
     let count = 0;
-    for (let i=1, l=i-1, r=i+1; i < nums.length; i++, l++, r++) {
-        if (nums[i] === nums[r]) {
-            i--;
-            l--;
-        }
-        else if (nums[i] === nums[l]) {
-          r=i+1;
-        }
-        else if (nums[i] > nums[l] && nums[i] > nums[r]) {
-            count++;
-            r=i+1;
-        }
-        else if (nums[i] < nums[l] && nums[i] < nums[r]) {
-            count++;
-            r=i+1;
+    for (let i=1, l=0; i < nums.length - 1; i++) {
+        if (nums[i] !== nums[i+1]) {
+          if ((nums[i] < nums[l] && nums[i] < nums[i+1]) || (nums[i] > nums[l] && nums[i] > nums[i+1])) {
+            count++
+          }
+          
+          l=i
         }
     }
     return count;
@@ -56,6 +48,29 @@ for (const test of tests) {
 //         }
 //         else if (nums[i] !== nums[i-1] && nums[i] !== nums[j]) {
 //           i++
+//         }
+//     }
+//     return count;
+// };
+
+// Attempt 2
+// var countHillValley = function(nums) {
+//     let count = 0;
+//     for (let i=1, l=i-1, r=i+1; i < nums.length; i++, l++, r++) {
+//         if (nums[i] === nums[r]) {
+//             i--;
+//             l--;
+//         }
+//         else if (nums[i] === nums[l]) {
+//           r=i+1;
+//         }
+//         else if (nums[i] > nums[l] && nums[i] > nums[r]) {
+//             count++;
+//             r=i+1;
+//         }
+//         else if (nums[i] < nums[l] && nums[i] < nums[r]) {
+//             count++;
+//             r=i+1;
 //         }
 //     }
 //     return count;
