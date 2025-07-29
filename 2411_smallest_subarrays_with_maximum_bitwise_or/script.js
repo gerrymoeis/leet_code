@@ -2,23 +2,37 @@
  * @param {number[]} nums
  * @return {number[]}
  */
+// var smallestSubarrays = function(nums) {
+//     const answers = new Array(nums.length);
+//     const last_seen_at = new Array(30);
+//     for (let i=nums.length-1; i >= 0; --i) {
+//         for (let k=0; k < last_seen_at.length; ++k) {
+//             if ((nums[i] & (1 << k)) !== 0) {
+//                 last_seen_at[k] = i;
+//             }
+//         }
+//         let furthest_reach = i;
+//         for (const location of last_seen_at) {
+//             if (location !== undefined) {
+//                 furthest_reach = Math.max(furthest_reach, location);
+//             }
+//         }
+//         const length = furthest_reach - i + 1;
+//         answers[i] = length;
+//     }
+//     return answers;
+// };
+
 var smallestSubarrays = function(nums) {
-    const answers = new Array(nums.length);
-    const last_seen_at = new Array(30);
+    const answers = new Array(nums.length).fill(1);
+    const last_seen_at = new Array(30).fill(0);
     for (let i=nums.length-1; i >= 0; --i) {
         for (let k=0; k < last_seen_at.length; ++k) {
             if ((nums[i] & (1 << k)) !== 0) {
                 last_seen_at[k] = i;
             }
+            answers[i] = Math.max(answers[i], last_seen_at[k]-i + 1);
         }
-        let furthest_reach = i;
-        for (const location of last_seen_at) {
-            if (location !== undefined) {
-                furthest_reach = Math.max(furthest_reach, location);
-            }
-        }
-        const length = furthest_reach - i + 1;
-        answers[i] = length;
     }
     return answers;
 };
