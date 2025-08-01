@@ -2,17 +2,32 @@
  * @param {number} numRows
  * @return {number[][]}
  */
+
+// Improved
 var generate = function(numRows) {
     nums = [[1]]
     for (let i=1; i<numRows; i++) {
-      let rows = [1, 1]
+      let rows = [1]
       for (let j=0; j < i-1; j++) {
-        rows.splice(1, 0, nums[i-1][j] + nums[i-1][j+1])
+        rows.push(nums[i-1][j] + nums[i-1][j+1])
       }
+      rows.push(1)
       nums.push(rows)
     }
     return nums
 };
+
+// var generate = function(numRows) {
+//     nums = [[1]]
+//     for (let i=1; i<numRows; i++) {
+//       let rows = [1, 1]
+//       for (let j=0; j < i-1; j++) {
+//         rows.splice(1, 0, nums[i-1][j] + nums[i-1][j+1])
+//       }
+//       nums.push(rows)
+//     }
+//     return nums
+// };
 
 let numRows = 50
 console.log(generate(numRows))
