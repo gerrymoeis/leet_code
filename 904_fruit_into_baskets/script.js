@@ -3,9 +3,7 @@
  * @return {number}
  */
 var totalFruit = function(fruits) {
-    let left = 0;
-    let point = 0;
-    let max = 0;
+    let left = point = max = 0;
     for (let i=1; i < fruits.length; ++i) {
         if (fruits[i] !== fruits[i-1] && fruits[i] !== fruits[point-1]) {
             left = point;
