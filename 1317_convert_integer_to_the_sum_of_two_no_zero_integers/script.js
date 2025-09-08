@@ -12,7 +12,7 @@ var getNoZeroIntegers = function(n) {
 };
 
 
-// chatgpt solutio, mehh
+// chatgpt solution, mehh
 /**
  * @param {number} n
  * @return {number[]}
