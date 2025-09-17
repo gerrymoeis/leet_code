@@ -1,38 +1,105 @@
-class FoodRatings {
-    constructor(foods, cuisines, ratings) {
-        this.foodToCuisine = new Map();
-        this.foodToRating = new Map();
-        this.cuisineFoods = new Map();
+/**
+ * @param {string[]} foods
+ * @param {string[]} cuisines
+ * @param {number[]} ratings
+ */
+var FoodRatings = function(foods, cuisines, ratings) {
+    this.foodToCuisine = new Map();
+    this.foodRatings = new Map();
+    this.cuisineToFoods = new Map(); // cuisine -> heap
 
-        for (let i = 0; i < foods.length; i++) {
-            this.foodToCuisine.set(foods[i], cuisines[i]);
-            this.foodToRating.set(foods[i], ratings[i]);
+    for (let i = 0; i < foods.length; i++) {
+        const food = foods[i];
+        const cuisine = cuisines[i];
+        const rating = ratings[i];
+
+        this.foodToCuisine.set(food, cuisine);
+        this.foodRatings.set(food, rating);
+
+        if (!this.cuisineToFoods.has(cuisine)) {
+            this.cuisineToFoods.set(cuisine, new MaxxHeap());
         }
+        this.cuisineToFoods.get(cuisine).push([rating, food]);
+    }
+};
 
-        for (let i = 0; i < foods.length; i++) {
-            let cuisine = cuisines[i];
-            if (!this.cuisineFoods.has(cuisine)) {
-                this.cuisineFoods.set(cuisine, new Set());
-            }
-            this.cuisineFoods.get(cuisine).add(foods[i]);
+/** 
+ * @param {string} food 
+ * @param {number} newRating
+ * @return {void}
+ */
+FoodRatings.prototype.changeRating = function(food, newRating) {
+    this.foodRatings.set(food, newRating);
+    const cuisine = this.foodToCuisine.get(food);
+    this.cuisineToFoods.get(cuisine).push([newRating, food]); // lazy insert
+};
+
+/** 
+ * @param {string} cuisine
+ * @return {string}
+ */
+FoodRatings.prototype.highestRated = function(cuisine) {
+    const heap = this.cuisineToFoods.get(cuisine);
+    while (heap.data.length > 0) {
+        const [rating, food] = heap.peek();
+        if (this.foodRatings.get(food) === rating) {
+            return food;
+        }
+        heap.pop(); // discard outdated entry
+    }
+    return "";
+};
+
+class MaxxHeap {
+    constructor() {
+        this.data = [];
+    }
+    push(item) {
+        this.data.push(item);
+        this._siftUp(this.data.length - 1);
+    }
+    peek() {
+        return this.data[0];
+    }
+    pop() {
+        const top = this.data[0];
+        const end = this.data.pop();
+        if (this.data.length > 0) {
+            this.data[0] = end;
+            this._siftDown(0);
+        }
+        return top;
+    }
+    _siftUp(idx) {
+        while (idx > 0) {
+            const parent = Math.floor((idx - 1) / 2);
+            if (this._compare(this.data[idx], this.data[parent]) < 0) break;
+            [this.data[idx], this.data[parent]] = [this.data[parent], this.data[idx]];
+            idx = parent;
         }
     }
-
-    changeRating(food, newRating) {
-        let cuisine = this.foodToCuisine.get(food);
-        this.cuisineFoods.get(cuisine).delete(food);
-        this.foodToRating.set(food, newRating);
-        this.cuisineFoods.get(cuisine).add(food);
+    _siftDown(idx) {
+        const length = this.data.length;
+        while (true) {
+            let left = idx * 2 + 1;
+            let right = idx * 2 + 2;
+            let largest = idx;
+            if (left < length && this._compare(this.data[left], this.data[largest]) > 0) largest = left;
+            if (right < length && this._compare(this.data[right], this.data[largest]) > 0) largest = right;
+            if (largest === idx) break;
+            [this.data[idx], this.data[largest]] = [this.data[largest], this.data[idx]];
+            idx = largest;
+        }
     }
-
-    highestRated(cuisine) {
-        let foods = Array.from(this.cuisineFoods.get(cuisine));
-        foods.sort((a, b) => {
-            let r1 = this.foodToRating.get(a);
-            let r2 = this.foodToRating.get(b);
-            if (r1 !== r2) return r2 - r1;
-            return a.localeCompare(b);
-        });
-        return foods[0];
+    _compare(a, b) {
+        // a and b are [rating, food] — higher rating first, then lexicographically smaller food
+        if (a[0] !== b[0]) return a[0] - b[0];
+        return b[1] < a[1] ? -1 : (b[1] > a[1] ? 1 : 0);
     }
 }
+/** 
+ * Your FoodRatings object will be instantiated and called as such:
+ * var obj = new FoodRatings(foods, cuisines, ratings)
+ * obj.changeRating(food,newRating)
+ * var param_2 = obj.highestRated(cuisine)
+ */
