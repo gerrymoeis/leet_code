@@ -7,7 +7,7 @@ var triangularSum = function(nums) {
         for (let i = 0; i < nums.length - 1; i++) {
             nums[i] = (nums[i] + nums[i + 1]) % 10;
         }
-        nums.pop(); // remove the last element
+        nums.pop();
     }
     return nums[0];
 };
